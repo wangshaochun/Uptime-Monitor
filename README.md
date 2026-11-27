@@ -307,7 +307,7 @@ npm run dev
 - Worker：`Workers & Pages` -> Worker -> `Settings` -> `Domains & Routes`
 - Pages：`Workers & Pages` -> Pages 项目 -> `Custom domains`
 
-项目不依赖需要付费的第三方服务。Telegram、Email、`crt.sh`、`rdap.org` 等外部服务可能受网络环境影响，国内用户建议优先使用企业微信、飞书、钉钉或自定义 Webhook。
+项目不依赖需要付费的第三方服务。Telegram、Email、`crt.sh`、`Cert Spotter`、`rdap.org` 等外部服务可能受网络环境影响，国内用户建议优先使用企业微信、飞书、钉钉或自定义 Webhook。
 
 ## 常见问题
 

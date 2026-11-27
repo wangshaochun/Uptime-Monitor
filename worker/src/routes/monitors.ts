@@ -299,10 +299,12 @@ monitors.post('/:id/check', async (c) => {
     const { results } = await c.env.DB.prepare(`SELECT * FROM monitors WHERE id = ?`).bind(id).all<Monitor>();
     if (!results[0]) return c.json({ error: 'Monitor not found' }, 404);
 
-    await updateDomainCertInfo(c.env, results[0]);
+    const infoCheckedAt = new Date().toISOString();
+    results[0].check_info_status = infoCheckedAt;
     await c.env.DB.prepare('UPDATE monitors SET check_info_status = ? WHERE id = ?')
-      .bind(new Date().toISOString(), id).run();
+      .bind(infoCheckedAt, id).run();
 
+    await updateDomainCertInfo(c.env, results[0]);
     await performCheck(results[0], c.env);
 
     return c.json({ success: true });
