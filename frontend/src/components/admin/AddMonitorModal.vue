@@ -34,13 +34,12 @@
           <!-- 监测频率 -->
           <div>
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2"><i class="fas fa-clock text-cyan-400"></i> 监测频率</h4>
-            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
-              <label v-for="opt in [{value:60,label:'1 分钟'},{value:180,label:'3 分钟'},{value:300,label:'5 分钟'},{value:600,label:'10 分钟'},{value:900,label:'15 分钟'},{value:1800,label:'30 分钟'}]" :key="opt.value"
-                class="flex flex-col items-center justify-center py-2.5 rounded-xl border-2 cursor-pointer transition-all text-center"
-                :class="Number(newMonitor.interval) === opt.value ? 'border-green-500 bg-green-900/20 text-green-400' : 'border-slate-700 text-slate-400 hover:border-green-500/40'">
-                <input type="radio" :value="opt.value" v-model="newMonitor.interval" class="sr-only">
-                <span class="text-sm font-bold">{{ opt.label }}</span>
-              </label>
+            <div class="flex items-center gap-3">
+              <div class="relative w-full sm:w-48">
+                <input type="number" v-model.number="intervalMinutes" min="1" step="1" placeholder="5" class="input-field w-full border border-slate-700 rounded-xl pl-4 pr-14 py-3 text-sm bg-slate-800/80 text-white focus:border-green-500 outline-none placeholder-slate-600">
+                <span class="absolute inset-y-0 right-0 pr-4 flex items-center text-sm text-slate-500 pointer-events-none">分钟</span>
+              </div>
+              <p class="text-xs text-slate-500">手动填写，最小 1 分钟</p>
             </div>
           </div>
           <!-- 高级选项 -->
@@ -124,6 +123,17 @@
 </template>
 
 <script setup>
-defineProps({ newMonitor: Object, submitting: Boolean });
+import { computed } from 'vue';
+
+const props = defineProps({ newMonitor: Object, submitting: Boolean });
 defineEmits(['close', 'submit']);
+
+// 界面按分钟填写，存储仍使用秒
+const intervalMinutes = computed({
+    get: () => Math.max(1, Math.round(Number(props.newMonitor?.interval || 300) / 60)),
+    set: (val) => {
+        const n = Math.round(Number(val));
+        if (Number.isFinite(n) && n >= 1) props.newMonitor.interval = n * 60;
+    },
+});
 </script>
